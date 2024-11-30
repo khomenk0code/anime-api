@@ -17,8 +17,6 @@ import { AppController } from './app.controller';
         const uri = configService.get<string>('MONGO_CONNECTION_STRING');
         const logger = new Logger('MongoDB');
 
-        logger.log(`Connecting to MongoDB: ${uri}`);
-
         return {
           uri,
           connectionFactory: (connection) => {
