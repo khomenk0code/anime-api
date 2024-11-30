@@ -10,7 +10,15 @@ async function bootstrap() {
   const port = configService.get<string>('APP_PORT') || 3001;
 
   app.enableCors({
-    origin: frontendUrl,
+    origin: (origin, callback) => {
+      const allowedOrigins = [frontendUrl, 'http://localhost:3000'];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
@@ -25,5 +33,6 @@ async function bootstrap() {
   );
 
   await app.listen(port);
+  console.log(`Application is running on port ${port}`);
 }
 bootstrap();
