@@ -45,10 +45,16 @@ export class AnimeRepository {
     paginationDto: PaginationDto,
     sortBy: string = 'rating',
     order: 'asc' | 'desc' = 'desc',
-  ): Promise<Anime[]> {
+  ): Promise<{
+    data: Anime[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
     const { limit, offset } = paginationDto;
     try {
       const sortOrder = order === 'asc' ? 1 : -1;
+      const totalItems = await this.animeModel.countDocuments();
       const animeList = await this.animeModel
         .find()
         .sort({ [sortBy]: sortOrder })
@@ -60,7 +66,15 @@ export class AnimeRepository {
         throw new NotFoundException('No anime records found');
       }
 
-      return animeList;
+      const currentPage = Math.ceil(offset / limit) + 1;
+      const totalPages = Math.ceil(totalItems / limit);
+
+      return {
+        data: animeList,
+        totalItems,
+        totalPages,
+        currentPage,
+      };
     } catch (error) {
       this.logger.error(
         `Error fetching anime list: ${error.message}`,

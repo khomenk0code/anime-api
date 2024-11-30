@@ -16,7 +16,12 @@ export class AnimeService {
     return this.animeRepository.create(createAnimeDto);
   }
 
-  async findAll(paginationDto: PaginationDto): Promise<Anime[]> {
+  async findAll(paginationDto: PaginationDto): Promise<{
+    data: Anime[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
     this.logger.log(`Service: Fetching all anime with pagination`);
     return this.animeRepository.findAll(paginationDto);
   }
