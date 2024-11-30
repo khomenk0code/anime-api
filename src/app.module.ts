@@ -2,6 +2,7 @@ import { Module, Logger } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AnimeModule } from './anime/anime.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -36,7 +37,6 @@ import { AnimeModule } from './anime/anime.module';
     }),
     AnimeModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
 })
 export class AppModule {}
